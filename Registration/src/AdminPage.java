@@ -2,6 +2,8 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,12 +23,36 @@ public class AdminPage extends javax.swing.JFrame {
         try{
             Connection();
             Function();
-            
+            if (Connection != null) {
+                JOptionPane.showMessageDialog(null, "Welcome Admin");
+            }
         } catch(SQLException ex){
             
             Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+    }
+    private int getIdForUpdate(String username, String name, String password, String contactNumber) {
+        int id = -1; 
+        
+        try {
+            String selectQuery = "SELECT id FROM sampledatabase WHERE Username=? OR Name=? OR Password=? OR ContactNumber=?";
+            PreparedStatement pstmt = Connection.prepareStatement(selectQuery);
+            pstmt.setString(1, username);
+            pstmt.setString(2, name);
+            pstmt.setString(3, password);
+            pstmt.setString(4, contactNumber);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return id;
     }
     Connection Connection;
     
@@ -55,7 +81,7 @@ public class AdminPage extends javax.swing.JFrame {
         }
     }
     
-    private int getIdForUpdate(String username, String name, String password, String contactNumber) {
+    private int sampledatabase(String username, String name, String password, String contactNumber) {
         int id = -1; 
         
         try {
@@ -85,7 +111,7 @@ public class AdminPage extends javax.swing.JFrame {
         
         try {
             
-            pst = Connection.prepareStatement("SELECT * FROM accountable");
+            pst = Connection.prepareStatement("SELECT * FROM sampledatabase");
             
             ResultSet rs = pst.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -128,6 +154,9 @@ public class AdminPage extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         SignoutButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
+        AddNewButton = new javax.swing.JToggleButton();
+        ClearButton = new javax.swing.JToggleButton();
+        UpdateButton = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -143,7 +172,7 @@ public class AdminPage extends javax.swing.JFrame {
         PasswordField = new javax.swing.JPasswordField();
         jLabel12 = new javax.swing.JLabel();
         LocationField = new javax.swing.JTextField();
-        ContactField = new javax.swing.JTextField();
+        ContactNumberField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -167,6 +196,30 @@ public class AdminPage extends javax.swing.JFrame {
             }
         });
 
+        AddNewButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        AddNewButton.setText("ADD");
+        AddNewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddNewButtonActionPerformed(evt);
+            }
+        });
+
+        ClearButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ClearButton.setText("CLEAR");
+        ClearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ClearButtonActionPerformed(evt);
+            }
+        });
+
+        UpdateButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        UpdateButton.setText("UPDATE");
+        UpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -176,9 +229,15 @@ public class AdminPage extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(SignoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(182, 182, 182)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                .addComponent(UpdateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(DeleteButton)
-                .addContainerGap(482, Short.MAX_VALUE))
+                .addGap(120, 120, 120))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,8 +245,11 @@ public class AdminPage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SignoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
+                    .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AddNewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UpdateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(62, 62, 62)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -251,6 +313,11 @@ public class AdminPage extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(Table);
@@ -320,14 +387,14 @@ public class AdminPage extends javax.swing.JFrame {
         });
         jPanel1.add(LocationField, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 270, 40));
 
-        ContactField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ContactField.setForeground(new java.awt.Color(102, 102, 102));
-        ContactField.addActionListener(new java.awt.event.ActionListener() {
+        ContactNumberField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ContactNumberField.setForeground(new java.awt.Color(102, 102, 102));
+        ContactNumberField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ContactFieldActionPerformed(evt);
+                ContactNumberFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(ContactField, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 270, 40));
+        jPanel1.add(ContactNumberField, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 270, 40));
 
         jLabel11.setBackground(new java.awt.Color(102, 102, 102));
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -366,9 +433,9 @@ public class AdminPage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_LocationFieldActionPerformed
 
-    private void ContactFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactFieldActionPerformed
+    private void ContactNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactNumberFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ContactFieldActionPerformed
+    }//GEN-LAST:event_ContactNumberFieldActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
       DefaultTableModel table = (DefaultTableModel) Table.getModel();
@@ -395,7 +462,7 @@ public class AdminPage extends javax.swing.JFrame {
             
             if (deleteItem == JOptionPane.YES_OPTION) {
                 
-                pst = Connection.prepareStatement("DELETE FROM accountable WHERE Name = ? AND Username = ?");
+                pst = Connection.prepareStatement("DELETE FROM sampledatabase WHERE Name = ? AND Username = ?");
                 pst.setString(1, name);
                 pst.setString(2, username);
                 
@@ -418,7 +485,7 @@ public class AdminPage extends javax.swing.JFrame {
                     NameField.requestFocus();
                     UsernameField.setText("");
                     PasswordField.setText("");
-                    ContactField.setText("");
+                    ContactNumberField.setText("");
                     LocationField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(null, "No record found with the specified Name and Username.");
@@ -430,6 +497,156 @@ public class AdminPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Invalid input for row number.");
         }
     }//GEN-LAST:event_DeleteButtonActionPerformed
+
+    private void AddNewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewButtonActionPerformed
+        PreparedStatement pst;
+
+        String name = NameField.getText();
+        String username = UsernameField.getText();
+        String password = PasswordField.getText();
+        String ContactNumber = ContactNumberField.getText();
+        String Address = LocationField.getText();
+        String regex1 = "^09[0-9]{9}$";
+        String regex2 = "^[a-zA-Z]+$";
+
+        Pattern pattern1 = Pattern.compile(regex1);
+        Pattern pattern2 = Pattern.compile(regex2);
+
+        Matcher matcherContactNumber = pattern1.matcher(ContactNumber);
+        Matcher matcherName = pattern2.matcher(name);
+
+        if(name.equals("")||username.equals("")||password.equals("")||ContactNumber.equals("")||Address.equals("")){
+            JOptionPane.showMessageDialog(null, "Make sure to fill out the empty textfield");
+        }else if(!matcherName.matches()){
+            JOptionPane.showMessageDialog(null, "Invalid name. Name should contain only alphabet characters");
+        }else if(!matcherContactNumber.matches()){
+
+            JOptionPane.showMessageDialog(null, "Phone number is Invalid. Enter a valid Number format - PH number");
+
+        }else{
+
+            try{
+                int Add = JOptionPane.showConfirmDialog(null, "Confirm to Add Data", "Warning", JOptionPane.YES_NO_OPTION);
+
+                if (Add == JOptionPane.YES_OPTION) {
+
+                    pst = Connection.prepareStatement("insert into accountable(Name,Username,Password,ContactNumber,Address)value(?,?,?,?,?)");
+
+                    pst.setString(1, NameField.getText());
+                    pst.setString(2, UsernameField.getText());
+                    pst.setString(3, PasswordField.getText());
+                    pst.setString(4, ContactNumberField.getText());
+                    pst.setString(5, LocationField.getText());
+
+                    pst.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Record Added");
+                    Function();
+
+                    NameField.setText("");
+                    NameField.requestFocus();
+                    UsernameField.setText("");
+                    PasswordField.setText("");
+                    ContactNumberField.setText("");
+                    LocationField.setText("");
+
+                }
+            }catch(SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_AddNewButtonActionPerformed
+
+    private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
+        DefaultTableModel table = (DefaultTableModel)Table.getModel();
+        int selectedRows = Table.getSelectedRow();
+        
+        NameField.setText(table.getValueAt(selectedRows, 0).toString());
+        UsernameField.setText(table.getValueAt(selectedRows, 1).toString());
+        PasswordField.setText(table.getValueAt(selectedRows, 2).toString());
+        ContactNumberField.setText(table.getValueAt(selectedRows, 3).toString());
+        LocationField.setText(table.getValueAt(selectedRows, 4).toString());
+        Table.isEditing();
+    }//GEN-LAST:event_TableMouseClicked
+
+    private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
+
+        int deleteItem = JOptionPane.showConfirmDialog(null, "Confirm to Clear text Fields", "Warning", JOptionPane.YES_NO_OPTION);
+
+        if (deleteItem == JOptionPane.YES_OPTION) {
+
+            NameField.setText("");
+            UsernameField.setText("");
+            PasswordField.setText("");
+            ContactNumberField.setText("");
+            LocationField.setText("");
+
+            JOptionPane.showMessageDialog(null, "Successfully cleared");
+
+        }
+
+    }//GEN-LAST:event_ClearButtonActionPerformed
+
+    private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
+
+        PreparedStatement pst;
+
+        String name = NameField.getText();
+        String username = UsernameField.getText();
+        String password = PasswordField.getText();
+        String contactNumber = ContactNumberField.getText();
+        String address = LocationField.getText();
+        String regex1 = "^09[0-9]{9}$";
+        String regex2 = "^[a-zA-Z]+$";
+
+        Pattern pattern1 = Pattern.compile(regex1);
+        Pattern pattern2 = Pattern.compile(regex2);
+
+        Matcher matcherContactNumber = pattern1.matcher(contactNumber);
+        Matcher matcherName = pattern2.matcher(name);
+
+        if (name.equals("") || username.equals("") || password.equals("") || contactNumber.equals("") || address.equals("")) {
+            JOptionPane.showMessageDialog(null, "Make sure to fill out the empty textfield");
+        }else if(!matcherName.matches()){
+            JOptionPane.showMessageDialog(null, "Invalid name. Name should contain only alphabet characters");
+        } else if (!matcherContactNumber.matches()) {
+            JOptionPane.showMessageDialog(null, "Phone number is Invalid. Enter a valid Number format - PH number");
+
+        } else {
+
+            try{
+
+                int Update = JOptionPane.showConfirmDialog(null, "Confirm to Update", "Warning", JOptionPane.YES_NO_OPTION);
+
+                if (Update == JOptionPane.YES_OPTION) {
+
+                    int id = getIdForUpdate(username,name,password,contactNumber);
+                    String updateQuery = "UPDATE sampledatabase SET Username=?, Password=?, ContactNumber=?, Location=?, Name=? WHERE id=?";
+                    pst = Connection.prepareStatement(updateQuery);
+                    pst.setString(1, username);
+                    pst.setString(2, password);
+                    pst.setString(3, contactNumber);
+                    pst.setString(4, address);
+                    pst.setString(5, name);
+                    pst.setInt(6, id);
+
+                    int rowsAffected = pst.executeUpdate();
+                    Function();
+
+                    if (rowsAffected > 0) {
+                        JOptionPane.showMessageDialog(null, "Successfully Updated");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No details to update");
+                    }
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error occurred while updating. Please try again later.");
+            }
+
+        }
+    }//GEN-LAST:event_UpdateButtonActionPerformed
  
    
     public static void main(String args[]) {
@@ -465,13 +682,16 @@ public class AdminPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField ContactField;
+    private javax.swing.JToggleButton AddNewButton;
+    private javax.swing.JToggleButton ClearButton;
+    private javax.swing.JTextField ContactNumberField;
     private javax.swing.JButton DeleteButton;
     private javax.swing.JTextField LocationField;
     private javax.swing.JTextField NameField;
     private javax.swing.JPasswordField PasswordField;
     private javax.swing.JButton SignoutButton;
     private javax.swing.JTable Table;
+    private javax.swing.JToggleButton UpdateButton;
     private javax.swing.JTextField UsernameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -487,4 +707,6 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+
 }

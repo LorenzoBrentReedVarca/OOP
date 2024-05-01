@@ -20,8 +20,11 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         try{
             Connection();
-        } catch(SQLException ex){
-            
+            if (Connection != null) {
+                JOptionPane.showMessageDialog(null, "Welcome");
+                JOptionPane.showMessageDialog(null, "Please login your account");
+            }
+        } catch(SQLException ex){ 
             Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
             
         }
@@ -38,7 +41,7 @@ public class Login extends javax.swing.JFrame {
     private static final String DbUsername = "root";
     private static final String DbPassword = "";
     
-    public void Connection() throws SQLException{
+    void Connection() throws SQLException{
         
         try {
             Class.forName(DbDriver);
@@ -194,15 +197,10 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Welcome Admin");     
             AdminPage Menu = new AdminPage();
             Menu.setVisible(true);
-            dispose();
-   
+            dispose();   
         }else{
+        String queryLogin = "SELECT * FROM sampledatabase WHERE Username = '" + username + "' AND Password = '" + password + "'";
 
-        
-   
-        String queryLogin = "SELECT * FROM accountable WHERE Username = '" + username + "' AND Password = '" + password + "'";
-
-        
         PreparedStatement pst;
         
         try {
@@ -210,21 +208,19 @@ public class Login extends javax.swing.JFrame {
             ResultSet rs = pst.executeQuery();
             if(!rs.next()){
                 JOptionPane.showMessageDialog(null, "No Credentials. Invalid Account Username or Password"); 
-            }else{
-                
-                
+            }else{              
                 UserPage UserPage = new UserPage();
                 String Name = rs.getString("Name");
                 String Username = rs.getString("Username");
                 String Password = rs.getString("Password");
                 String ContactNumber = rs.getString("ContactNumber");
-                String Address = rs.getString("Address");
+                String Location = rs.getString("Location");
                 
                 UserPage.NameField.setText(Name);
                 UserPage.UsernameField.setText(Username);
                 UserPage.PasswordField.setText(Password);
                 UserPage.ContactNumberField.setText(ContactNumber);
-                UserPage.LocationField.setText(Address);
+                UserPage.LocationField.setText(Location);
 
                 JOptionPane.showMessageDialog(null, "Account Match"); 
                 UserPage.setVisible(true);

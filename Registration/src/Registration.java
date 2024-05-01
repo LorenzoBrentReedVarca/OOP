@@ -80,7 +80,7 @@ public class Registration extends javax.swing.JFrame {
         SignupButton = new javax.swing.JButton();
         LoginButton = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        ContactField = new javax.swing.JTextField();
+        ContactNumberField = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         LocationField = new javax.swing.JTextField();
 
@@ -152,11 +152,11 @@ public class Registration extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Contact Number#");
 
-        ContactField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ContactField.setForeground(new java.awt.Color(102, 102, 102));
-        ContactField.addActionListener(new java.awt.event.ActionListener() {
+        ContactNumberField.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ContactNumberField.setForeground(new java.awt.Color(102, 102, 102));
+        ContactNumberField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ContactFieldActionPerformed(evt);
+                ContactNumberFieldActionPerformed(evt);
             }
         });
 
@@ -189,7 +189,7 @@ public class Registration extends javax.swing.JFrame {
                         .addComponent(UsernameField)
                         .addComponent(jLabel7)
                         .addComponent(PasswordField)
-                        .addComponent(ContactField, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ContactNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(LocationField))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -206,7 +206,7 @@ public class Registration extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(NameField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -225,7 +225,7 @@ public class Registration extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ContactField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ContactNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(SignupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -235,7 +235,7 @@ public class Registration extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 500));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -245,11 +245,11 @@ public class Registration extends javax.swing.JFrame {
     }//GEN-LAST:event_PasswordFieldActionPerformed
 
     private void SignupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupButtonActionPerformed
-    String name = NameField.getText();
+        String name = NameField.getText();
         String username = UsernameField.getText();
         String password = PasswordField.getText();
-        String ContactNumber = ContactField.getText();
-        String Address = LocationField.getText();
+        String ContactNumber = ContactNumberField.getText();
+        String Location = LocationField.getText();
         String regex1 = "^09[0-9]{9}$";
         String regex2 = "^[a-zA-Z]+$";
         
@@ -260,7 +260,7 @@ public class Registration extends javax.swing.JFrame {
         Matcher matcherName = pattern2.matcher(name);
 
  
-        if(name.equals("")||username.equals("")||password.equals("")||ContactNumber.equals("")||Address.equals("")){
+        if(name.equals("")||username.equals("")||password.equals("")||ContactNumber.equals("")||Location.equals("")){
             JOptionPane.showMessageDialog(null, "Make sure to fill out the empty textfield");
             
             
@@ -278,7 +278,7 @@ public class Registration extends javax.swing.JFrame {
             
             if (Choice == JOptionPane.YES_OPTION){
 
-            String queryRegister = "INSERT INTO accountable(Name, Username, Password, ContactNumber, Address) VALUES ('"+name+"', '"+username+"', '"+password+"','"+ContactNumber+"','"+Address+"')";
+            String queryRegister = "INSERT INTO sampledatabase(Name, Username, Password, ContactNumber, Location) VALUES ('"+name+"', '"+username+"', '"+password+"','"+ContactNumber+"','"+Location+"')";
             
             try{
                 Statement.execute(queryRegister);
@@ -288,7 +288,7 @@ public class Registration extends javax.swing.JFrame {
                     NameField.setText("");
                     UsernameField.setText("");
                     PasswordField.setText("");
-                    ContactField.setText("");
+                    ContactNumberField.setText("");
                     LocationField.setText("");
                     
                 
@@ -311,9 +311,9 @@ public class Registration extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_LoginButtonActionPerformed
 
-    private void ContactFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactFieldActionPerformed
+    private void ContactNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactNumberFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ContactFieldActionPerformed
+    }//GEN-LAST:event_ContactNumberFieldActionPerformed
 
     private void NameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameFieldActionPerformed
         // TODO add your handling code here:
@@ -363,7 +363,7 @@ public class Registration extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField ContactField;
+    private javax.swing.JTextField ContactNumberField;
     private javax.swing.JTextField LocationField;
     private javax.swing.JButton LoginButton;
     private javax.swing.JTextField NameField;

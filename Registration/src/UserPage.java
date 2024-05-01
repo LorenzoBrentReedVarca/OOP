@@ -27,9 +27,11 @@ public class UserPage extends javax.swing.JFrame {
     public UserPage() {
         initComponents();
         NameField.setEditable(false);
+       
         
         try{
             Connection();
+            JOptionPane.showMessageDialog(null, "Welcome User");
         } catch(SQLException ex){
             
             Logger.getLogger(Registration.class.getName()).log(Level.SEVERE, null, ex);
@@ -287,7 +289,7 @@ public class UserPage extends javax.swing.JFrame {
     }//GEN-LAST:event_SIgnoutButtonActionPerformed
 
     private void UsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameFieldActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:    
     }//GEN-LAST:event_UsernameFieldActionPerformed
 
     private void NameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameFieldActionPerformed
@@ -303,7 +305,7 @@ public class UserPage extends javax.swing.JFrame {
     }//GEN-LAST:event_LocationFieldActionPerformed
 
     private void ContactNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactNumberFieldActionPerformed
-        // TODO add your handling code here:
+            // TODO add your handling code here:
     }//GEN-LAST:event_ContactNumberFieldActionPerformed
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
@@ -313,7 +315,7 @@ public class UserPage extends javax.swing.JFrame {
         String username = UsernameField.getText();
         String password = PasswordField.getText();
         String contactNumber = ContactNumberField.getText();
-        String address = LocationField.getText();
+        String location = LocationField.getText();
         String regex1 = "^09[0-9]{9}$";
         String regex2 = "^[a-zA-Z]+$";
         
@@ -323,7 +325,7 @@ public class UserPage extends javax.swing.JFrame {
         Matcher matcherContactNumber = pattern1.matcher(contactNumber);
         Matcher matcherName = pattern2.matcher(name);
         
-        if (name.isEmpty() || username.isEmpty() || password.isEmpty() || contactNumber.isEmpty() || address.isEmpty()) {
+        if (name.isEmpty() || username.isEmpty() || password.isEmpty() || contactNumber.isEmpty() || location.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill out all the fields.");
        }else if(!matcherName.matches()){   
             JOptionPane.showMessageDialog(null, "Invalid name. Name should contain only alphabet characters");    
@@ -337,12 +339,12 @@ public class UserPage extends javax.swing.JFrame {
             
                 if (Update == JOptionPane.YES_OPTION) { 
 
-                String updateQuery = "UPDATE accountable SET Username=?, Password=?, ContactNumber=?, Address=? WHERE Name=?";
+                String updateQuery = "UPDATE sampledatabase SET Username=?, Password=?, ContactNumber=?, Location=? WHERE Name=?";
                 pst = Connection.prepareStatement(updateQuery);
                 pst.setString(1, username);
                 pst.setString(2, password);
                 pst.setString(3, contactNumber);
-                pst.setString(4, address);
+                pst.setString(4, location);
                 pst.setString(5, name);
                 
                 
@@ -350,7 +352,8 @@ public class UserPage extends javax.swing.JFrame {
                 
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Profile updated successfully."); 
-                    
+                }else if (rowsAffected == 0){
+                    JOptionPane.showMessageDialog(null, "No Changes Were Made");
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to update profile.");
                 }
@@ -398,13 +401,13 @@ public class UserPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField ContactNumberField;
-    private javax.swing.JTextField LocationField;
-    private javax.swing.JTextField NameField;
-    private javax.swing.JTextField PasswordField;
+    public static javax.swing.JTextField ContactNumberField;
+    public static javax.swing.JTextField LocationField;
+    public static javax.swing.JTextField NameField;
+    public static javax.swing.JTextField PasswordField;
     private javax.swing.JButton SIgnoutButton;
     private javax.swing.JButton UpdateButton;
-    private javax.swing.JTextField UsernameField;
+    public static javax.swing.JTextField UsernameField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
